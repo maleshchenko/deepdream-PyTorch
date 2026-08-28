@@ -1,6 +1,6 @@
 # DeepDream in PyTorch
 
-DeepDream is a computer vision algorithm that produces psychedelic, dreamlike images by enhancing patterns in existing images using a deep neural network. It works by performing gradient ascent in feature space, causing the network to amplify patterns it recognizes. This helps visualize what features a deep network has learned, while producing visually striking artistic results.
+DeepDream is a computer vision algorithm that produces psychedelic, dreamlike images by enhancing patterns in existing images using a deep neural network. It works by performing gradient ascent in feature space (as opposed to gradient descent in typical machine learning), causing the network to amplify patterns it recognizes. This helps visualize what features a deep network has learned, while producing visually striking artistic results.
 
 DeepDream was invented by Google and applied to the Inception network (trained on ImageNet) in 2014. The original algorithm was implemented in Caffe. This repository is a **PyTorch implementation** using InceptionV3, making it easy to run and understand the core concepts behind the algorithm.
 
