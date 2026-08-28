@@ -109,7 +109,7 @@ Mixed_5b, Mixed_5c, Mixed_6a, Mixed_6b, Mixed_6c, Mixed_7a, Mixed_7b, Mixed_7c
 
 ## Algorithm Variants
 
-The code includes three rendering algorithms:
+The code includes two rendering algorithms:
 
 ### 1. Multi-Scale Octave Processing (Default - `render_deepdream`)
 Highest quality. Processes image from coarse to fine resolution.
@@ -120,11 +120,6 @@ Highest quality. Processes image from coarse to fine resolution.
 Simple single-scale approach.
 - **Pros**: Fast, lower memory usage
 - **Cons**: Lower quality results, can produce artifacts
-
-### 3. Laplacian Normalization (`render_lapnorm`)
-Advanced technique using frequency domain normalization.
-- **Pros**: Coherent results, better gradient distribution
-- **Cons**: More complex, moderate speed
 
 ## Technical Details
 
