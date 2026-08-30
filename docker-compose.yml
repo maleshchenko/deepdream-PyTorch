@@ -1,0 +1,13 @@
+services:
+  deepdream:
+    build:
+      context: .
+      args:
+        TORCH_INDEX_URL: https://download.pytorch.org/whl/cpu
+    image: deepdream-pytorch
+    volumes:
+      - .:/data
+    # NVIDIA GPU (Linux with NVIDIA Container Toolkit):
+    # gpus: all
+    # Then rebuild with:
+    #   TORCH_INDEX_URL: https://download.pytorch.org/whl/cu124

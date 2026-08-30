@@ -175,6 +175,58 @@ python test_pytorch.py --content source.jpg --layer Mixed_7c \
     --iterations 50 --step 1.5 --octaves 6
 ```
 
+## Docker
+
+The image uses CPU PyTorch by default. Mount the current directory at `/data` so input images and outputs stay on the host.
+
+### Build
+
+```bash
+docker build -t deepdream-pytorch .
+```
+
+GPU build (Linux with NVIDIA Container Toolkit):
+
+```bash
+docker build -t deepdream-pytorch --build-arg TORCH_INDEX_URL=https://download.pytorch.org/whl/cu124 .
+```
+
+### Run
+
+```bash
+# Random noise → deepdream_pytorch.jpg and original_image_pytorch.jpg in the current directory
+docker run --rm -v "$(pwd):/data" deepdream-pytorch
+
+# Existing image
+docker run --rm -v "$(pwd):/data" deepdream-pytorch --content my_image.jpg --output result.jpg
+
+# Extra options (same flags as local usage)
+docker run --rm -v "$(pwd):/data" deepdream-pytorch \
+    --content input.jpg \
+    --output output.jpg \
+    --layer Mixed_7c \
+    --iterations 30 \
+    --step 0.8 \
+    --octaves 4
+```
+
+GPU run (after a CUDA image build):
+
+```bash
+docker run --rm --gpus all -v "$(pwd):/data" deepdream-pytorch --content my_image.jpg --output result.jpg
+```
+
+### Docker Compose
+
+```bash
+docker compose build
+docker compose run --rm deepdream
+docker compose run --rm deepdream --content my_image.jpg --output result.jpg
+```
+
+For GPU, set `gpus: all` in `docker-compose.yml` and rebuild with `TORCH_INDEX_URL=https://download.pytorch.org/whl/cu124`.
+
+
 ## Tips for Best Results
 
 1. **Start with good source images**: Interesting textures and patterns work well
