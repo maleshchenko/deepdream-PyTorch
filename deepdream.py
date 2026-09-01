@@ -11,6 +11,7 @@ This implementation generates DeepDream images by:
 
 import os
 import argparse
+import logging
 import numpy as np
 import PIL.Image
 import scipy.ndimage
@@ -19,13 +20,20 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import models
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 # ============================================================================
 # Setup: Device, Model, and Layer Configuration
 # ============================================================================
 
 # Automatically use GPU if available, otherwise CPU
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(f'Using device: {device}')
+logger.info(f'Using device: {device}')
 
 # Load pre-trained InceptionV3 model (trained on ImageNet)
 model = models.inception_v3(weights=models.Inception_V3_Weights.IMAGENET1K_V1)
@@ -79,7 +87,7 @@ def showarray(a, fname='out_pytorch.jpg'):
     a = np.uint8(np.clip(a, 0, 1) * 255)
     img = PIL.Image.fromarray(a)
     img.save(fname)
-    print(f'Saved image to {fname}')
+    logger.info(f'Saved image to {fname}')
 
 def visstd(a, s=0.1):
     """
@@ -265,7 +273,7 @@ def render_deepdream(layer_name, img0=img_noise,
             hi = octaves[-octave]
             img = resize(img, hi.shape[:2]) + hi
         
-        print(f'Processing octave {octave + 1}/{octave_n}')
+        logger.info(f'Processing octave {octave + 1}/{octave_n}')
         
         # Gradient ascent iterations at this scale
         for i in range(iter_n):
@@ -279,7 +287,7 @@ def render_deepdream(layer_name, img0=img_noise,
             img += g * step
             
             if i % 10 == 0:
-                print(f'  Iteration {i + 1}/{iter_n}')
+                logger.debug(f'  Iteration {i + 1}/{iter_n}')
     
     # Save result
     showarray(img / 255.0, output)
@@ -325,7 +333,7 @@ def render_naive(layer_name, img0=img_noise, iter_n=20, step=1.0):
         img += g * step
         
         if i % 5 == 0:
-            print(f'Iteration {i + 1}/{iter_n}, Loss: {loss.item():.6f}')
+            logger.debug(f'Iteration {i + 1}/{iter_n}, Loss: {loss.item():.6f}')
     
     # Save result
     showarray(visstd(img), 'deepdream_naive_pytorch.jpg')
@@ -374,19 +382,19 @@ Examples:
 
     # Load input image
     if os.path.exists(args.content):
-        print(f'Loading content image from: {args.content}')
+        logger.info(f'Loading content image from: {args.content}')
         img0 = np.float32(PIL.Image.open(args.content).convert('RGB'))
     else:
-        print(f'Content image not found: {args.content}')
-        print('Generating from random noise instead')
+        logger.warning(f'Content image not found: {args.content}')
+        logger.info('Generating from random noise instead')
         img0 = img_noise.copy()
     
-    print(f'Input image shape: {img0.shape}')
+    logger.info(f'Input image shape: {img0.shape}')
     showarray(img0 / 255.0, 'original_image_pytorch.jpg')
     
     # Generate DeepDream
-    print(f'\nGenerating DeepDream for layer: {args.layer}')
-    print(f'Parameters: iterations={args.iterations}, step={args.step}, octaves={args.octaves}')
+    logger.info(f'Generating DeepDream for layer: {args.layer}')
+    logger.info(f'Parameters: iterations={args.iterations}, step={args.step}, octaves={args.octaves}')
     
     render_deepdream(
         args.layer,
@@ -398,7 +406,5 @@ Examples:
         output=args.output,
     )
     
-    print(f'\nDeepDream image saved to: {args.output}')
-
-    
-    print('\nDeepDream generation complete!')
+    logger.info(f'DeepDream image saved to: {args.output}')
+    logger.info('DeepDream generation complete!')
