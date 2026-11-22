@@ -8,7 +8,7 @@ DeepDream was invented by Google and applied to the Inception network (trained o
 
 ```python test_pytorch.py --content source.jpg --layer Mixed_5b --iterations 200 --step 1.6 --octaves 5```
 
-<img width="400" height="400" alt="source" src="https://github.com/user-attachments/assets/e755cea5-75aa-4e21-a640-8c57aa7985dc" /> <img width="400" height="400" alt="deepdream_pytorch" src="https://github.com/user-attachments/assets/ff33b51e-02fc-480c-8667-dc0be42db1dd" />
+<img width="500" height="500" alt="source" src="https://github.com/user-attachments/assets/e755cea5-75aa-4e21-a640-8c57aa7985dc" /> <img width="500" height="500" alt="deepdream_pytorch" src="https://github.com/user-attachments/assets/ff33b51e-02fc-480c-8667-dc0be42db1dd" />
 
 ## How It Works
 
